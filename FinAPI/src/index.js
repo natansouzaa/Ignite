@@ -34,13 +34,6 @@ function getBalance(statement) {
     return balance;
 }
 
-/**
- * Dados de uma conta:
- *  cpf = string
- *  name -string
- *  id - uuid
- *  tatement []
- */
 app.post("/account", (request, response) => {
     const { cpf, name } = request.body;
 
@@ -61,8 +54,6 @@ app.post("/account", (request, response) => {
 
     return response.status(201).send();
 });
-
-//app.use(verifyIsExistsAccountCPF);
 
 app.get("/statement", verifyIsExistsAccountCPF, (request, response) => {
     const { customer } = request;
@@ -106,6 +97,21 @@ app.post("/withdraw", verifyIsExistsAccountCPF, (request, response) => {
     customer.statement.push(statementOperation);
 
     return response.status(201).send();
+});
+
+app.get("/statement/date", verifyIsExistsAccountCPF, (request, response) => {
+    const { customer } = request;
+    const { date } = request.query;
+
+    const dateFormat = new Date(date + " 00:00");
+
+    const statement = customer.statement.filter(
+        (statement) => 
+            statement.created_at.toDateString() === 
+            new Date(dateFormat).toDateString()
+    );
+
+    return response.json(statement);
 });
 
 app.listen(3000);
