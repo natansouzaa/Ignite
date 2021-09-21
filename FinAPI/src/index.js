@@ -129,4 +129,20 @@ app.put("/account", verifyIsExistsAccountCPF, (request, response) => {
     return response.status(201).send();
 });
 
+app.delete("/account", verifyIsExistsAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    customers.splice(customer, 1);
+
+    return response.status(200).json(customers);
+});
+
+app.get("/balance", verifyIsExistsAccountCPF, (request, response) => {
+    const { customer } = request;
+
+    const balance = getBalance(customer.statement);
+
+    return response.json(balance);
+});
+
 app.listen(3000);
