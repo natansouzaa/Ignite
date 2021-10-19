@@ -11,7 +11,7 @@ import swaggerFile from '../../../swagger.json';
 import { router } from './routes';
 import { AppError } from '../../errors/AppError';
 
-createConnection();
+createConnection('database');
 const app = express();
 
 app.use(express.json());
